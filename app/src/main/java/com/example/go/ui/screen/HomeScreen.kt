@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -82,21 +84,27 @@ fun InfoAppScaffold() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    IconButton(onClick = {}, modifier = Modifier.fillMaxSize().weight(1f)) {
+                    IconButton(onClick = {}, modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)) {
                         Icon(
                             painter = painterResource(R.mipmap.ic_menu),
                             modifier = Modifier,
                             contentDescription = "Menu"
                         )
                     }
-                    IconButton(onClick = {}, modifier = Modifier.fillMaxSize().weight(1f)) {
+                    IconButton(onClick = {}, modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)) {
                         Icon(
                             painter = painterResource(R.mipmap.ic_profile_foreground),
                             modifier = Modifier,
                             contentDescription = "Profile"
                         )
                     }
-                    IconButton(onClick = {}, modifier = Modifier.fillMaxSize().weight(1f)) {
+                    IconButton(onClick = {}, modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)) {
                         Icon(
                             painter = painterResource(R.mipmap.ic_trash_foreground),
                             modifier = Modifier,
@@ -116,10 +124,10 @@ fun InfoAppScaffold() {
 /** Итоговый экран */
 @Composable
 fun HomeScreen(
-    innerPaddingValues: PaddingValues = PaddingValues(0.dp),
+    innerPaddingValues: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier = Modifier.padding(innerPaddingValues)) {
         Banners()
         BodyCategories()
         BodyMenu()
