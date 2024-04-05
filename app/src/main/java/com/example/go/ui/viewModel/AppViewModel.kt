@@ -35,7 +35,8 @@ class AppViewModel(): ViewModel() {
             appUiState = AppUiState.Loading
             appUiState = try {
                 val categoriesList = AppApi.retrofitService.getCategories()
-                AppUiState.Success("Yeah $categoriesList")
+                val mealsList = AppApi.retrofitService.getMeals()
+                AppUiState.Success("Yeah $categoriesList and $mealsList")
             } catch (e: IOException) {
                 AppUiState.Error
             } catch (e: HttpException) {

@@ -2,6 +2,7 @@ package com.example.go.network
 
 import com.example.go.model.Categories
 import com.example.go.model.Categories.Category
+import com.example.go.model.Meals
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -19,6 +20,9 @@ private val retrofit = Retrofit.Builder()
 interface AppApiService {
     @GET("api/json/v1/1/categories.php")
     suspend fun getCategories(): Categories
+
+    @GET("api/json/v1/1/search.php?s")
+    suspend fun getMeals(): Meals
 }
 
 /** Публичный Api объект */
