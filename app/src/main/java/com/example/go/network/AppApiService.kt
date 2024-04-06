@@ -1,7 +1,6 @@
 package com.example.go.network
 
 import com.example.go.model.Categories
-import com.example.go.model.Categories.Category
 import com.example.go.model.Meals
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,10 +10,8 @@ import retrofit2.http.GET
 private const val BASE_URL = "https://themealdb.com/"
 
 /** Билдим ретрофит */
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(GsonConverterFactory.create())
-    .baseUrl(BASE_URL)
-    .build()
+private val retrofit =
+    Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(BASE_URL).build()
 
 /** Api сайтов для запросов Ретрофита */
 interface AppApiService {

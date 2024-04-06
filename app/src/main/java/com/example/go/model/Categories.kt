@@ -1,9 +1,13 @@
 package com.example.go.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Categories(
-    val categories: List<Category?>?
+    @SerializedName("categories")
+    val listOfCategories: List<Category>
 ) {
     data class Category(
-        val strCategory: String?
+        @SerializedName("strCategory")
+        val strCategory: String
     )
 }
