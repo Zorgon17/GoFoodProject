@@ -31,9 +31,17 @@ class AppViewModel : ViewModel() {
     var appUiState: AppUiState by mutableStateOf(AppUiState.Loading)
         private set
 
+    var choosedCategory by mutableStateOf("")
+        private set
+
+    fun onCategorySelected(category: String) {
+        choosedCategory = category
+    }
+
     init {
         getValue()
     }
+
 
     /** viewModelScope снимает любую сопраграмму если ViewModel снят с использования */
     /** блоком try/catch обрабатываем ошибку невозможности загрузки данных */

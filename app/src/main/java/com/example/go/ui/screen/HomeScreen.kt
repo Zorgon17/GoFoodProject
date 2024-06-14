@@ -52,6 +52,7 @@ import com.example.go.model.Categories.Category
 import com.example.go.model.Meals.Meal
 import com.example.go.ui.theme.GoTheme
 import com.example.go.ui.viewModel.AppUiState
+import com.example.go.ui.viewModel.AppViewModel
 
 
 /** Scaffold */
@@ -59,7 +60,7 @@ import com.example.go.ui.viewModel.AppUiState
 /** BottomAppBar */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoAppScaffold(appUiStateInScaffold: AppUiState) {
+fun InfoAppScaffold(appViewModel: AppViewModel) {
     Scaffold(modifier = Modifier,
         topBar = {
             TopAppBar(
@@ -131,21 +132,23 @@ fun InfoAppScaffold(appUiStateInScaffold: AppUiState) {
             }
         }
     ) { innerPaddingValues ->
-        HomeScreen(innerPaddingValues, appUiStateInScaffold)
+        HomeScreen(innerPaddingValues, appViewModel)
     }
 }
 
 @Composable
 fun HomeScreen(
     innerPaddingValues: PaddingValues,
-    appUiStateInHomeScreen: AppUiState,
+    appViewModel: AppViewModel,
     modifier: Modifier = Modifier
 ) {
-    when (appUiStateInHomeScreen) {
+    when (appViewModel.appUiState) {
         is AppUiState.Success -> ResultScreen(
             innerPaddingValues,
-            categories = appUiStateInHomeScreen.categories.listOfCategories,
-            meals = appUiStateInHomeScreen.meals.listOfMeals
+            choosedCategory = appViewModel.choosedCategory, // передаем выбранную категорию
+            categories = (appViewModel.appUiState as AppUiState.Success).categories.listOfCategories,
+            meals = (appViewModel.appUiState as AppUiState.Success).meals.listOfMeals,
+            appViewModel = appViewModel
         )
 
         else -> null // оффлайн режим
@@ -156,14 +159,16 @@ fun HomeScreen(
 @Composable
 fun ResultScreen(
     innerPaddingValues: PaddingValues,
-    modifier: Modifier = Modifier,
+    choosedCategory: String,
     categories: List<Category>,
-    meals: List<Meal>
+    meals: List<Meal>,
+    appViewModel: AppViewModel,
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = Modifier.padding(innerPaddingValues)) {
         Banners()
-        BodyCategories(categories = categories)
-        BodyMenu(meals)
+        BodyCategories(categories = categories, appViewModel = appViewModel)
+        BodyMenu(meals, choosedCategory = choosedCategory)
     }
 }
 
@@ -186,17 +191,21 @@ fun Banners(modifier: Modifier = Modifier.fillMaxWidth()) {
 
 /** Основное тело rатегорий товара */
 @Composable
-fun BodyCategories(categories: List<Category>, modifier: Modifier = Modifier) {
+fun BodyCategories(
+    categories: List<Category>,
+    modifier: Modifier = Modifier,
+    appViewModel: AppViewModel
+) {
     LazyRow(
         modifier
             .height(40.dp)
             .background(Color.White)
     ) {
         item {
-            AllCategory(color = Color.Gray)
+            AllCategory(color = Color.Gray, appViewModel = appViewModel)
         }
         items(items = categories) { category ->
-            Category(category, color = Color.Gray)
+            Category(category, color = Color.Gray, appViewModel = appViewModel)
         }
     }
 }
@@ -204,13 +213,13 @@ fun BodyCategories(categories: List<Category>, modifier: Modifier = Modifier) {
 
 /** Ячейка Обнуления категории */
 @Composable
-fun AllCategory(color: Color) {
+fun AllCategory(appViewModel: AppViewModel, color: Color) {
     Box(
         modifier = Modifier
             .height(40.dp)
             .width(88.dp), contentAlignment = Alignment.Center
     ) {
-        TextButton(onClick = { /*TODO*/ }) {
+        TextButton(onClick = { appViewModel.onCategorySelected("") }) {
             Text(
                 text = "All",
                 fontSize = 13.sp,
@@ -224,13 +233,13 @@ fun AllCategory(color: Color) {
 
 /** Ячейка категории */
 @Composable
-fun Category(category: Category, color: Color) {
+fun Category(category: Category, color: Color, appViewModel: AppViewModel) {
     Box(
         modifier = Modifier
             .height(40.dp)
             .width(88.dp), contentAlignment = Alignment.Center
     ) {
-        TextButton(onClick = { }) {
+        TextButton(onClick = { appViewModel.onCategorySelected(category.strCategory) }) { // вызываем функцию из viewModel {
             Text(
                 text = category.strCategory,
                 fontSize = 13.sp,
@@ -244,11 +253,14 @@ fun Category(category: Category, color: Color) {
 
 /** Основное тело меню */
 @Composable
-fun BodyMenu(meals: List<Meal>, modifier: Modifier = Modifier.fillMaxWidth()) {
+fun BodyMenu(meals: List<Meal>,choosedCategory: String, modifier: Modifier = Modifier.fillMaxWidth()) {
     LazyColumn {
         items(meals) { meal ->
-            Product(meal)
-
+            if (meal.strCategory.equals(choosedCategory)) {
+                Product(meal)
+            } else if (choosedCategory.equals("")) {
+                Product(meal)
+            }
         }
     }
 }

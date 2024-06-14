@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val viewModel: AppViewModel = viewModel()
-                    InfoAppScaffold(viewModel.appUiState)
+                    InfoAppScaffold(viewModel)
                 }
             }
         }
